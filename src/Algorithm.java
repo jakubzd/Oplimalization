@@ -1,10 +1,7 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Algorithm {
     public static void main(String[] args) {
-        double[] packageSizes = {500, 200, 100, 50}; // 760
-        System.out.println(optimizedProductPackaging(650, packageSizes));
+        double[] packageSizes = {500, 250, 100};
+        System.out.println(optimizedProductPackaging(980, packageSizes));
     }
 
     public static StringBuilder optimizedProductPackaging(double weight, double[] packageSizes) {
@@ -20,7 +17,7 @@ public class Algorithm {
                 double tempWeight = weight;
                 weight -= amount * packageSizes[i];
                 if (i - 1 > 0) {
-                    if (weight < tempWeight - packageSizes[i - 1]) {
+                    if (weight <= tempWeight - packageSizes[i - 1]) {
                         i--;
                         weight = tempWeight;
                         amount = (int) (weight / packageSizes[i]) + 1;
@@ -28,16 +25,16 @@ public class Algorithm {
                     }
                 }
                 if (firstAppend) {
-                    stringBuilder.append(packageSizes[i]).append("x").append(amount);
+                    stringBuilder.append(amount).append("x").append(packageSizes[i]);
                     firstAppend = false;
                 } else {
-                    stringBuilder.append(" + ").append(packageSizes[i]).append("x").append(amount);
+                    stringBuilder.append("+").append(amount).append("x").append(packageSizes[i]);
                 }
             } else {
                 if (i + 1 < packageSizes.length) {
                     i++;
                 } else if (packageSizes[packageSizes.length - 1] >= weight) {
-                    stringBuilder.append(" + ").append(packageSizes[i]).append("x").append(1);
+                    stringBuilder.append("+").append(1).append("x").append(packageSizes[i]);
                     weight -= packageSizes[packageSizes.length - 1];
                 }
             }
