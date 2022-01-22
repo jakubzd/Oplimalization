@@ -4,8 +4,7 @@ import java.util.List;
 public class Algorithm {
     public static void main(String[] args) {
         double[] packageSizes = {500, 200, 100, 40};
-        System.out.println(optimizedProductPackagingTwo(890, packageSizes));
-        //System.out.println(optimizedPackagingToString(optimizedProductPackagingTwo(890, packageSizes), packageSizes));
+        System.out.println(optimizedPackagingToString(optimizedProductPackaging(690, packageSizes), packageSizes));
     }
 
     static int calculateAmount(double weight, double packageSize) {
@@ -18,11 +17,10 @@ public class Algorithm {
         return weight - packageSize * amount;
     }
 
-    public static StringBuilder optimizedProductPackagingTwo(double weight, double[] packageSizes) {
+    public static StringBuilder optimizedProductPackaging(double weight, double[] packageSizes) {
 
         boolean firstAppend = true;
         List<Double> calculatedReminders = new ArrayList<>();
-        List<Integer> calculatedAmounts = new ArrayList<>();
         int leastAmount;
         double smallestReminder;
         StringBuilder stringBuilder = new StringBuilder();
@@ -48,14 +46,16 @@ public class Algorithm {
                         break;
                     } else if (reminder < 0) {
                         if (j != packageSizes.length - 1) {
+                            int amountOfSmallerPackage = calculateAmount(weight, packageSizes[j + 1]);
+                            if (Math.abs(reminder) > Math.abs(calculateRemainder(weight, packageSizes[j + 1], amountOfSmallerPackage)))
                             amount--;
                         }
-                        if (amount == 0) {
+                        if (amount <= 0) {
                             continue;
                         } else {
                             weight -= updateWeight(packageSizes[j], amount);
                             append(packageSizes[j], firstAppend, stringBuilder, amount);
-                            stringBuilder.append(" + ");
+                            stringBuilder.append("+");
                         }
                     } else if (reminder < smallestReminder || (reminder == smallestReminder && leastAmount > amount)) {
                       smallestReminder = reminder;
@@ -87,51 +87,11 @@ public class Algorithm {
         return (i == packageSizes.length - 1);
     }
 
-    private static int findMultipliedSize(double value, double[] packageSizes) {
-        for (int i = 0; i < packageSizes.length; i++) {
-            if (packageSizes[i] != value && packageSizes[i] % value == 0 && packageSizes[i] / value != 0) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private static int calculateMultiplier(double smaller, double bigger) {
-        return (int) (bigger / smaller);
-    }
-
-    public static int calculateMultiplicity(double smaller, double bigger, int multiplier) {
-        return (int) (bigger / smaller / multiplier);
-    }
-
     public static StringBuilder optimizedPackagingToString(StringBuilder stringBuilder, double[] packageSizes) {
-        StringBuilder sb = new StringBuilder();
         String packaging = stringBuilder.toString();
-        String[] split = packaging.split("x");
-        for (int i = 0; i < split.length; i += 2) {
-            double value = Double.parseDouble(split[i + 1]);
-            int multipliedSize = findMultipliedSize(value, packageSizes);
-            int newAmount;
-            int multiplier;
-            if (multipliedSize != -1) {
-                if (packageSizes[multipliedSize] > value) {
-                    multiplier = calculateMultiplier(value, packageSizes[multipliedSize]);
-                    newAmount = calculateMultiplicity(value, packageSizes[multipliedSize], multiplier);
-                } else {
-                    multiplier = calculateMultiplier(packageSizes[multipliedSize], value);
-                    newAmount = calculateMultiplicity(packageSizes[multipliedSize], value, multiplier);
-                }
-                int reminder = Integer.parseInt(split[i]) - newAmount * multiplier;
-                split[i] = String.valueOf(newAmount);
-                sb.append(newAmount).append("x").append(packageSizes[multipliedSize]).append(" + ")
-                        .append(reminder).append("x").append(value);
-            }
-        }
-        return sb;
+        String outcome = packaging.substring(0, packaging.length() - 1);
+        return new StringBuilder(outcome);
     }
-//    public StringBuilder newOptimization(double weight, double[] packageSizes) {
-//
-//    }
 }
 
 
