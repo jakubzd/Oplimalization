@@ -1,0 +1,10 @@
+opakowania(waga, wagiOpakowan, startIndeks)
+jeżeli wagi[0] * amount + 1 < wagi[0] * amount + opakowania(waga - wagi[0], wagiOpakowan)
+
+jeżeli waga - 500 * (1 + 1) < (waga - 500) - 250 * amount + 1
+dodaj amount * 500
+
+
+masa
+oblicz resztę jaka zostanie przy wybraniu tego produktu
+
